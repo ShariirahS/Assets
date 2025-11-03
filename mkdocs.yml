@@ -1,6 +1,5 @@
 site_name: Assets
 nav:
   - Home: index.md
-  - About: about.md
 theme:
   name: gitbook
