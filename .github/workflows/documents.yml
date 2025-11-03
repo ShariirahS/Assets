@@ -13,6 +13,6 @@ jobs:
         with:
           python-version: "3.13"
       - run: pip install mkdocs mkdocs-gitbook
-      - run: mkdocs gh-deploy --force
+      - run: mkdocuments gh-deploy --force
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
