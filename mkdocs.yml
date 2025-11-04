@@ -2,5 +2,19 @@ site_name: Assets
 site_url: https://shari-ar.github.io/Assets/
 nav:
   - Home: index.md
+  - "🧱 System Design Spec": system-design.md
+  - "🧩 API Reference": api-reference.md
+  - "🔐 Auth & Security Guide": auth-security-guide.md
+  - "💰 Payment Integration": payment-integration.md
+  - "🧮 Database Schema": database-schema.md
+  - "🪄 Frontend Guide": frontend-guide.md
+  - "⚙️ Backend Guide": backend-guide.md
+  - "🔍 Testing Guide": testing-guide.md
+  - "🧠 DevOps & Deployment": devops-deployment.md
+  - "📦 Monorepo Management": monorepo-management.md
+  - "📲 Notifications & Messaging": notifications-messaging.md
+  - "👥 User Roles & Permissions": user-roles-permissions.md
+  - "📈 Dashboards & Reporting": dashboards-reporting.md
+  - "🧰 Developer Guide": developer-guide.md
 theme:
   name: gitbook
