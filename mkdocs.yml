@@ -1,7 +1,10 @@
 site_name: Assets
+site_description: An open-source web app where users lend assets to each other through ticket-based requests, payments, and time-limited access. Built with Django Ninja, Next.js, and PostgreSQL
+site_author: Shahriyar Gorgany
 site_url: https://shari-ar.github.io/Assets/
+repo_url: https://github.com/shari-ar/Assets/
 nav:
-  - Home: index.md
+  - "📘 Architecture Guide": index.md
   - "🧱 System Design Spec": system-design.md
   - "🧩 API Reference": api-reference.md
   - "🔐 Auth & Security Guide": auth-security-guide.md
@@ -18,3 +21,13 @@ nav:
   - "🧰 Developer Guide": developer-guide.md
 theme:
   name: gitbook
+  color_mode: auto
+  user_color_mode_toggle: true
+  nav_style: primary
+  shortcuts:
+    help: 191 # ?
+    next: 78 # n
+    previous: 80 # p
+    search: 83 # s
+extra_css:
+  - css/extra.css
