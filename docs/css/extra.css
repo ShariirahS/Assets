@@ -1,8 +1,8 @@
-ul.navigation li:first-child a {
+nav[role="navigation"] > ul.summary > li:first-child a {
   font-weight: bold;
   font-size: x-large;
 }
 
-ul.navigation li:nth-last-child(-n + 3) {
+nav[role="navigation"] > ul.summary > li:nth-last-child(-n + 3) {
   display: none;
 }
