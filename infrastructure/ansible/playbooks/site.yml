@@ -1,0 +1,6 @@
+---
+- name: Provision Assets stack
+  hosts: all
+  become: true
+  roles:
+    - common

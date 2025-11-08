@@ -1,0 +1,10 @@
+{
+  "name": "assets-frontend-placeholder",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Frontend dev placeholder'",
+    "build": "echo 'Frontend build placeholder'",
+    "start": "echo 'Frontend start placeholder'"
+  }
+}
