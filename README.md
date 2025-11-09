@@ -48,7 +48,13 @@ Zarinpal ↔ Wallet ↔ Tickets
 
 ## 🔑 Environment Setup
 
-Create `.env` file in the root folder (See `.env.template`).
+Create a `.env` file in the repo root based on the shared defaults:
+
+```bash
+cp .env.example .env
+```
+
+> 💡 **WSL tip:** make sure Docker Desktop integration is enabled for your WSL distro. Services started inside WSL are reachable from Windows via `http://localhost:<port>`, so no extra port forwarding is needed.
 
 ---
 
@@ -60,7 +66,7 @@ git clone https://github.com/shari-ar/Assets.git
 cd Assets
 
 # 2️⃣ Run
-compose up --build
+docker compose up --build
 ```
 
 ---
