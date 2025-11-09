@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "echo 'Frontend dev placeholder'",
-    "build": "echo 'Frontend build placeholder'",
-    "start": "echo 'Frontend start placeholder'"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   }
 }

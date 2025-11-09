@@ -2,91 +2,91 @@
 
 ## Overview
 
-The **Assets** project is a full‑stack, peer‑to‑peer asset lending platform built with a modern open‑source stack. It demonstrates how to combine **Next.js** with **Django Ninja** in a **monorepo** powered by **TurboRepo**. Users borrow and lend assets through ticket‑based requests, track balances via an integrated wallet, and handle payments using the Zarinpal gateway.
+The **Assets** project is still in the scaffolding phase. While the repository showcases how a Next.js + Django Ninja monorepo could look, every service is currently a placeholder container that prints status messages and idles. No business logic, database schema, or UI has been implemented yet.
 
 ## Monorepo Layout
 
-The repository is organized as a monorepo using TurboRepo. Each folder at the root serves a distinct purpose:
+The repository is organized as a monorepo using TurboRepo. Each folder at the root is a shell awaiting real code:
 
 ```
 / (root)
-│  ├─ backend/   – Django project using Django Ninja for the API
-│  ├─ frontend/  – Next.js app using React and HeroUI for the UI
-│  ├─ packages/  – shared code (types, helpers)
-│  ├─ docs/      – project documentation
-│  ├─ mkdocs.yml – MkDocs configuration for documentation site
+│  ├─ backend/   – Dockerfile + empty scaffold for a future Django project
+│  ├─ frontend/  – Dockerfile + empty scaffold for a future Next.js app
+│  ├─ docs/      – Project documentation (this site)
+│  ├─ compose.yml – Docker Compose stack describing placeholder services
 │  └─ …
 ```
 
-Having the server and client in one repository simplifies dependency management, encourages code sharing, and makes it easier to coordinate releases.
+Keeping both app surfaces in a single repository simplifies dependency management and release coordination once they exist.
 
-## Application Flow
+## Current State
 
-The following diagram illustrates the high‑level flow of a typical session:
+At the moment the Docker Compose stack spins up four containers:
 
-```
-                  ┌───────────────┐           ┌──────────────┐          ┌───────────────┐
-    User ──────▶ │  Frontend      │ ───────▶ │  Backend     │ ───────▶│ Database      │
-                  │ (Next.js)     │           │ (Django)     │          │ (Postgres)    │
-                  └───────────────┘           └──────────────┘          └───────────────┘
-                         ▲                          │                          │
-                         │                          │                          │
-                         │                          ▼                          │
-                  OAuth 2.0 / JWT             Business logic            Persistent data
-```
+| Service   | Reality today | Placeholder command |
+| --------- | ------------- | ------------------- |
+| `backend` | No Django app yet. | `bash -lc "echo 'Backend placeholder awaiting Django app'; tail -f /dev/null"` (see [`compose.yml`](../compose.yml)). |
+| `frontend`| No Next.js app yet. | `bash -lc "echo 'Frontend placeholder awaiting Next.js app'; tail -f /dev/null"` (see [`compose.yml`](../compose.yml)). |
+| `db`      | Ready-to-run Postgres image. | Standard `postgres:16` entrypoint. |
+| `redis`   | Ready-to-run Redis image. | Standard `redis:7-alpine` entrypoint. |
 
-1. **Authentication:** Users log in using Auth0 (SSO) or email/password via OAuth 2.0. Upon successful authentication, the frontend stores a short‑lived JWT in a secure cookie.
-2. **Frontend:** Built with Next.js and HeroUI, it provides dashboards, forms for ticket creation, and wallet management. It communicates with the backend via REST endpoints.
-3. **Backend:** Django + Django Ninja expose a versioned API. Services include authentication, wallet operations, ticket lifecycle management, and reporting.
-4. **Database:** PostgreSQL stores users, roles, wallets, ledger entries, tickets, and audit logs. Row‑level security can be enabled for multi‑tenant scenarios.
-5. **Payments:** The backend integrates with Zarinpal for payment processing; future gateways can be added via an adapter pattern.
+Both app containers mirror the placeholder commands in their Dockerfiles, keeping the stack idle until code exists.
 
-## Backend Architecture
+!!! todo "Follow the real build path"
+    Replace the backend command with `python manage.py runserver 0.0.0.0:8000` (or Gunicorn) after creating the Django project. Likewise, swap the frontend command for `npm run dev -- --hostname 0.0.0.0 --port 3000` once the Next.js app is scaffolded. These commands are already commented in [`compose.yml`](../compose.yml), [`backend/Dockerfile`](../backend/Dockerfile), and [`frontend/Dockerfile`](../frontend/Dockerfile).
 
-The **backend** folder contains a Django project configured with Django Ninja. Each module is structured as an app:
+## Backend Architecture (Planned)
 
-- **auth** – handles OAuth 2.0, email/password login, JWT issuance, and role management.
-- **wallet** – manages user balances and ledger entries; interacts with payment providers.
-- **tickets** – CRUD operations for loan requests and approvals; manages ticket statuses and SLA logic.
-- **reports** – aggregates data for dashboards and exports (CSV, XLSX).
+The `backend/` directory only contains Docker boilerplate today. Once the Django project is generated, expect apps such as authentication, wallet, tickets, reports, payments, and notifications to live under `backend/apps/`. See the [roadmap](#roadmap) for the build order.
 
-The API is type‑hinted and auto‑documented via OpenAPI/Swagger, making it easy for developers to explore available endpoints.
+## Database Schema (Planned)
 
-## Database Schema (Key Tables)
+The schema described below will be modelled once Django migrations are introduced; no tables exist yet.
 
-| Table             | Description                                       |
-| ----------------- | ------------------------------------------------- |
-| `users`           | User accounts, including SSO subject and role.    |
-| `wallets`         | One wallet per user; tracks balance and currency. |
-| `ledger_entries`  | Double‑entry accounting for wallet transactions.  |
-| `tickets`         | Asset lending requests with status and pricing.   |
-| `ticket_comments` | Comments and attachments associated with tickets. |
-| `audit_logs`      | Records of security‑sensitive actions.            |
+| Table (planned)   | Purpose (planned)                                  |
+| ----------------- | -------------------------------------------------- |
+| `users`           | Account + role management.                         |
+| `wallets`         | Wallet balances and currency metadata.             |
+| `ledger_entries`  | Double-entry transaction history.                  |
+| `tickets`         | Asset lending lifecycle records.                   |
+| `ticket_comments` | Collaboration between borrower and lender.         |
+| `audit_logs`      | Critical action auditing.                          |
 
-This schema is defined in Django models and managed via migrations. Seed data is provided to facilitate local development and testing.
+## Request Lifecycle (Concept)
 
-## Request Lifecycle Example
+The future flow will roughly follow the steps below once APIs exist. Keep this as a reference checklist while building.
 
-To illustrate how components work together, consider the flow of creating a ticket:
+1. User authenticates and receives JWTs.
+2. Frontend posts ticket data to REST endpoints.
+3. Backend persists data, notifies stakeholders, and orchestrates payments.
+4. Wallet service performs double-entry bookkeeping.
+5. Reports aggregate data for dashboards and exports.
 
-1. **Login:** The user logs in via Auth0 (or email/password), receiving a JWT.
-2. **Create Ticket:** On the frontend, the user fills out a form specifying the asset, desired duration, and price. The form posts to `POST /tickets/`.
-3. **Backend Processing:** Django Ninja validates the request, creates a `Ticket` record in Postgres, and emits a notification to the lender via SMS/WhatsApp and email.
-4. **Lender Response:** The lender accepts or declines via a PATCH endpoint; if accepted, the platform records a pending transaction.
-5. **Payment & Ledger:** Once both parties confirm, the wallet service debits the borrower’s balance and credits the lender’s. Ledger entries are written, and Zarinpal processes the external payment.
-6. **Completion:** At the end of the loan period, the ticket status is updated and funds are settled accordingly.
+## Security Considerations (Planned)
 
-## Security Considerations
+Security work will start after core features land. Use this list as guidance for future stories.
 
-- **Authentication & Authorization:** OAuth 2.0 and JWT ensure that only authenticated users can access protected routes. Role checks enforce permissions (admin vs user).
-- **Transport & Data Security:** All traffic is served over HTTPS; sensitive data at rest is encrypted (e.g. AES for private keys). Passwords are hashed with modern algorithms like bcrypt.
-- **Rate Limiting:** The API includes rate limiting and CSRF protection to mitigate abuse.
-- **Audit Logging:** Administrative actions and wallet operations are logged for traceability.
+- OAuth 2.0, JWT, and role checks for access control.
+- HTTPS termination with Nginx proxy templates under `deploy/nginx`.
+- Rate limiting and audit logging for critical actions.
 
-## Extensibility & Deployment
+## Extensibility & Deployment (Coming Soon)
 
-The project is intentionally modular:
+No CI/CD or deployment pipelines are active yet. The Dockerfiles document the intended commands and should be updated once real builds exist.
 
-- **Adapters:** Payment providers are abstracted behind interfaces; adding support for other gateways (Stripe, Coinbase) requires minimal changes.
-- **Services:** Each domain (auth, wallet, tickets) can be extended independently, making it easy to introduce new features such as asset categories or escrow.
-- **DevOps:** The repository includes Docker and CI/CD configurations (GitHub Actions). Deployments can target platforms like Vercel (frontend) and Render/Railway/Fly (backend).
+!!! todo "Wire up build + serve commands"
+    - Update [`backend/Dockerfile`](../backend/Dockerfile) to run `python manage.py migrate` and start Gunicorn when the Django app is ready.
+    - Update [`frontend/Dockerfile`](../frontend/Dockerfile) to install dependencies with `npm ci`, build with `npm run build`, and start with `npm run start`.
+
+## Roadmap
+
+Follow these steps to turn the placeholders into a working platform:
+
+1. **Bootstrap Django project** in `backend/` (e.g., `django-admin startproject config .`). Update `compose.yml` to replace the placeholder command with `python manage.py runserver 0.0.0.0:8000`.
+2. **Create initial apps** (`auth`, `wallet`, `tickets`) and migrations. Re-enable the commented `python manage.py migrate` in the backend Dockerfile.
+3. **Scaffold Next.js app** in `frontend/`. Swap the compose command to `npm run dev -- --hostname 0.0.0.0 --port 3000`.
+4. **Implement API routes** with Django Ninja and connect the frontend pages.
+5. **Add production commands**: enable Gunicorn in `compose.yml` and `backend/Dockerfile`, and turn on `npm run start` in `frontend/Dockerfile`.
+6. **Harden deployment**: configure Nginx templates under `deploy/nginx`, set secrets, and add CI checks.
+
+Each step unlocks the next; [`compose.yml`](../compose.yml) remains the source of truth for the service commands.

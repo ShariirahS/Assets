@@ -4,68 +4,85 @@
 
 The roadmap aligns engineering, product, and operations so the platform launches with solid foundations and evolves toward a multi-tenant, AI-assisted creator marketplace.
 
-## 2024 Q3 — Foundation Launch
+## Documented Capability Milestones
 
-| Track | Objectives | Key Deliverables |
-| --- | --- | --- |
-| Platform Core | Ship v1 authentication, onboarding, and baseline dashboards. | Django backend auth flows, Next.js landing + dashboard, PostgreSQL schema migration set |
-| Content Pipeline | Enable asset uploads with processing queue. | S3-compatible storage integration, Celery worker image (placeholder commands in compose kept commented until Celery app lands), upload moderation workflow draft |
-| DevOps | Keep parity between dev/staging/prod. | GitHub Actions PR/release flows, Dockerized services, nightly health workflow |
-| Observability | Light telemetry to catch regressions early. | Sentry wiring, Prometheus + Grafana stack (dashboards stubbed) |
+| Status | Milestone | Documented Capabilities | Source |
+| --- | --- | --- | --- |
+| [Placeholder] | Architecture Shell → Replace placeholder commands with real runtimes. | Monorepo layout, TurboRepo structure, Docker Compose placeholders awaiting Django/Next.js apps. | [Architecture](./index.md)
+| [Placeholder] | Documented Auth Flows → Implement JWT + OAuth endpoints. | Email/password & OAuth login, refresh/logout, secure cookies, audit logging, security testing suite. | [Auth & Security](./auth-security.md)
+| [Placeholder] | Backend Blueprint → Scaffold Django project and domain apps. | Planned Django + Ninja stack, app responsibilities (auth, wallet, tickets, payments, reports, notifications), enable migrations & Gunicorn. | [Backend](./backend.md)
+| [Placeholder] | Frontend Blueprint → Scaffold Next.js App Router experience. | Next.js + HeroUI stack, planned routes (`/dashboard`, `/wallet`, `/tickets`, `/admin`), Zustand state, build commands. | [Frontend](./frontend.md)
+| [Placeholder] | Database Schema → Materialize core tables and constraints. | Users, wallets, ledger entries, tickets, payments, reports, notifications tables with indexes and RLS guidance. | [Database Schema](./database-schema.md)
+| [Placeholder] | API Surface → Ship Ninja routers matching documented contracts. | Auth, users, wallet, ticket, report endpoints with example payloads and error handling. | [API Reference](./api-reference.md)
+| [Placeholder] | Reporting Stack → Build dashboards & exports pipeline. | Role-based dashboards, Redis caching, aggregation jobs, CSV/PDF exports, performance considerations. | [Dashboards & Reporting](./dashboards-reporting.md)
+| [Placeholder] | Payment Rails → Integrate Zarinpal adapter with ledger sync. | Zarinpal endpoints, initiation/verification flows, sandbox creds, error codes, reconciliation steps, HMAC signatures. | [Payment Integration](./payment-integration.md)
+| [Placeholder] | Messaging Fabric → Stand up Celery-powered notifications. | Multi-channel templates (SMS, WhatsApp, Email), retry logic, logging, admin broadcast tools, Prometheus metrics. | [Notifications & Messaging](./notifications-messaging.md)
+| [Placeholder] | Role Enforcement → Enforce RBAC end-to-end. | Admin/User roles, permission matrix, decorators, dashboard access rules, future roles. | [User Roles & Permissions](./user-roles-permissions.md)
+| [Placeholder] | Quality Gates → Automate testing strategy. | PyTest, Django Test Client, Jest/RTL, Playwright, Locust, Bandit/Safety workflows, fixtures and coverage guidance. | [Testing Guide](./testing.md)
+| [Placeholder] | Operational Platform → Turn DevOps scaffolding into CI/CD. | GitHub Actions blueprints, Docker images, environment secrets, monitoring stack, Terraform/Ansible roadmap. | [DevOps & Deployment](./devops-deployment.md)
+| [Placeholder] | Platform Cohesion → Align services with system design guardrails. | Cross-service flows (auth, wallets, tickets), integration topology, scalability tactics, security principles. | [System Design](./system-design.md)
 
-## 2024 Q4 — Monetization & Automation
+## Phase 1 — Core Runtime Bring-up
 
-1. Subscription engine with Stripe billing cycles and usage-based add-ons.
-2. AI tagging service (FastAPI microservice) to accelerate asset discovery.
-3. Infrastructure-as-Code promotion: Terraform modules for DO Kubernetes, Ansible hardening playbooks.
-4. Incident response runbooks + pager rotations documented in `docs/ops/` (folder to be created when content is ready).
+| Status | Focus | Based On | Next Step |
+| --- | --- | --- | --- |
+| [Placeholder] | Activate Architecture Shell | Architecture, Backend, Frontend | Generate Django + Next.js projects and switch Compose/Dockerfile commands to real runtimes. |
+| [Placeholder] | Stand up Auth & RBAC | Auth & Security, User Roles & Permissions | Build `/auth/login`, `/auth/refresh`, role-aware middlewares, and audit logging. |
+| [Placeholder] | Materialize Database Schema | Database Schema | Create migrations for users, wallets, tickets, payments, notifications with documented indexes. |
 
-## 2025 Q1 — Scale & Community
+## Phase 2 — Transaction & Data Foundations
 
-- Roll out community features (comments, follows) with rate limiting and spam tooling.
-- Launch analytics warehouse: dbt transformations feeding Metabase dashboards.
-- Formalize blue/green deployments with canary releases via Argo Rollouts.
+| Status | Focus | Based On | Next Step |
+| --- | --- | --- | --- |
+| [Placeholder] | Deliver API Surface | API Reference, System Design | Implement Ninja routers for users, wallet, tickets, reports and align responses to documented contracts. |
+| [Placeholder] | Wire Payment Rails | Payment Integration, Database Schema | Build Zarinpal initiation/verification, ledger reconciliation, and failure handling. |
+| [Placeholder] | Enable Messaging Fabric | Notifications & Messaging, System Design | Launch Celery worker, channel adapters, and notification templates with retries. |
 
-## 2025 Q2 and Beyond — Ecosystem Expansion
+## Phase 3 — Experience & Insight
 
-| Initiative | Description |
-| --- | --- |
-| Marketplace APIs | Partner integration APIs with OAuth scopes, sandbox credentials, and throttling policies. |
-| Multi-Tenancy | Namespace isolation for enterprise tenants, billing upgrades, per-tenant feature flags. |
-| Compliance | SOC 2 Type I readiness checklist, automated evidence collection via Drata integration. |
-| Growth Experiments | Personalized recommendations using retrained embeddings every sprint. |
+| Status | Focus | Based On | Next Step |
+| --- | --- | --- | --- |
+| [Placeholder] | Launch Frontend Experience | Frontend, API Reference | Implement documented routes, state management, and API client wrappers to render live data. |
+| [Placeholder] | Build Reporting Stack | Dashboards & Reporting, Database Schema | Implement aggregation jobs, Redis caching, and export endpoints powering dashboards. |
+| [Placeholder] | Establish Quality Gates | Testing Guide, DevOps & Deployment | Enable automated lint/test pipelines, Playwright suite, and CI enforcement. |
+
+## Phase 4 — Operational Maturity
+
+| Status | Focus | Based On | Next Step |
+| --- | --- | --- | --- |
+| [Placeholder] | Harden Operations | DevOps & Deployment | Turn placeholder GitHub Actions into deploy pipelines, configure monitoring stack, and document rollback drills. |
+| [Placeholder] | Scale & Secure Platform | System Design, Auth & Security | Apply scalability patterns, enforce encryption practices, and finalize incident response workflows. |
+| [Placeholder] | Close Reporting Feedback Loop | Dashboards & Reporting, Testing Guide | Add observability metrics, regression alerts, and usage analytics to refine product decisions. |
 
 ## Dependency Map
 
 ```mermaid
 graph TD
-  Core[Core Platform MVP] --> Billing[Stripe Monetization]
-  Core --> AI[AI Tagging Service]
-  Core --> Observability[Full Observability Stack]
-  Billing --> Marketplace[Marketplace APIs]
-  AI --> Growth[Growth Experiments]
-  Observability --> Compliance[Compliance Tooling]
+  Runtime[Core Runtime Bring-up] --> Transactions[Transaction & Data Foundations]
+  Transactions --> Experience[Experience & Insight]
+  Experience --> Operations[Operational Maturity]
+  Runtime --> Operations
 ```
 
 ## Decision Log
 
-- Maintain Docker Compose stubs with placeholder commands until respective apps land to avoid broken CI.
-- Keep GitHub Actions workflows in dry-run mode where real services are missing; swap comments once services ship.
-- Prioritize Terraform remote state before provisioning new environments to protect drift-sensitive infra changes.
+- Keep Docker Compose placeholder commands until each milestone flips from [Placeholder] to [In Progress]; change commands only when code compiles locally.
+- Promote docs as the source of truth—new work must update both implementation and corresponding documentation row before marking a milestone [In Progress].
+- Treat GitHub Actions workflows as opt-in: uncomment real steps only after the related capability passes local verification.
 
 ## Risks & Mitigations
 
 | Risk | Mitigation |
 | --- | --- |
-| Late backend delivery stalls AI tagging integration. | Track backend API readiness in sprint reviews; AI team uses mocked endpoints until stable. |
-| GHCR image sprawl increases costs. | Automate retention policy (workflow ticket `DEVOPS-42`). |
-| Terraform rollout blocked by missing secrets. | Store secrets in GitHub OIDC + Vault bridging, document in `docs/devops-deployment.md`. |
+| Capability remains stuck in [Placeholder] because upstream docs drift. | Pair each implementation PR with documentation validation to keep milestones accurate. |
+| Rushing payment integration without ledger support breaks accounting. | Complete "Wire Payment Rails" only after "Materialize Database Schema" covers ledger entries and constraints. |
+| CI/CD activation before tests exist causes noisy failures. | Follow the phased rollout—"Establish Quality Gates" happens after backend/frontend/tests are committed. |
 
 ## Success Metrics
 
 - 99.5% uptime across staging/prod once launch occurs.
 - <15 min mean time to restore (MTTR) after incident.
 - Monthly feature adoption growth >20% for community capabilities.
-- Deployment frequency ≥2 per week by end of 2024 Q4.
+- Deployment frequency ≥2 per week by end of Phase 4.
 
-Stay agile: revisit this roadmap at every quarterly planning to sync with product feedback and market shifts.
+Stay agile: revisit this roadmap at every phase checkpoint to sync with product feedback and market shifts.

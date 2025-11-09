@@ -48,7 +48,13 @@ Zarinpal ↔ Wallet ↔ Tickets
 
 ## 🔑 Environment Setup
 
-Create `.env` file in the root folder (See `.env.template`).
+Create a `.env` file in the repo root based on the shared defaults:
+
+```bash
+cp .env.example .env
+```
+
+> 💡 **WSL tip:** make sure Docker Desktop integration is enabled for your WSL distro. Services started inside WSL are reachable from Windows via `http://localhost:<port>`, so no extra port forwarding is needed.
 
 ---
 
@@ -60,8 +66,19 @@ git clone https://github.com/shari-ar/Assets.git
 cd Assets
 
 # 2️⃣ Run
-compose up --build
+docker compose up --build
 ```
+
+---
+
+## ⚠️ Current Dev Caveats
+
+| Service | What you’ll see today | Workaround |
+|---------|-----------------------|------------|
+| Backend (Django) | `python manage.py runserver` is wired into Docker, but the project scaffold isn’t checked in yet, so the container exits with a missing `manage.py` error. | Keep the container stopped for now; once the Django app lands, restart with `docker compose up`. |
+| Frontend (Next.js) | `npm run dev` now invokes Next.js, but the `next` dependency isn’t installed until the real app ships. | Wait to run the command until the frontend package.json gains the proper dependencies. |
+
+> 💡 **WSL heads-up:** Docker Desktop still needs to stay running, and you’ll see the backend container crash fast for the reason above—that’s expected until the Django project is merged.
 
 ---
 
