@@ -2,197 +2,64 @@
 
 ## Overview
 
-The **Assets** frontend is a modern, responsive, and component-driven web application built with **Next.js** and **HeroUI**. It serves as the user interface for managing authentication, asset lending, ticket tracking, wallets, and dashboards.
+The frontend service is also a stub—the `frontend` container only prints a placeholder message and waits. This page outlines the intended Next.js implementation once we scaffold the project.
 
----
+!!! todo "Enable the Next.js runtime"
+    Replace the placeholder command `bash -lc "echo 'Frontend placeholder awaiting Next.js app'; tail -f /dev/null"` with `npm run dev -- --hostname 0.0.0.0 --port 3000` in both [`compose.yml`](../compose.yml) and [`frontend/Dockerfile`](../frontend/Dockerfile) after the app exists. Production runs should eventually use `npm run start` as commented in those files.
 
-## Tech Stack
+Stay aligned with the [architecture roadmap](./index.md#roadmap) while building features.
 
-| Category         | Technology                       | Purpose                                   |
-| ---------------- | -------------------------------- | ----------------------------------------- |
-| Framework        | **Next.js**                      | Server-side rendering (SSR) and routing   |
-| UI Library       | **HeroUI 2.8.x**                 | Modern responsive UI components           |
-| State Management | **Zustand** or **React Context** | Global state handling for auth and wallet |
-| Styling          | **Tailwind CSS**                 | Utility-first CSS framework               |
-| Forms            | **React Hook Form**              | Form handling and validation              |
-| Charts           | **Recharts**                     | Data visualization for reports            |
-| HTTP Client      | **Axios**                        | Communication with Django Ninja API       |
-| Notifications    | **React Toastify**               | Feedback and alerts                       |
-| Authentication   | **JWT** (via HttpOnly cookie)    | Secure session management                 |
+## Planned Tech Stack
 
----
+| Category         | Planned technology | Intended purpose                                 |
+| ---------------- | ------------------ | ------------------------------------------------ |
+| Framework        | **Next.js (App Router)** | Core UI framework + routing                 |
+| UI Library       | **HeroUI**         | Component primitives                             |
+| Styling          | **Tailwind CSS**   | Utility-first styling                            |
+| Forms            | **React Hook Form**| Validation + UX                                   |
+| State            | **Zustand / Context** | Session and wallet state management          |
+| Charts           | **Recharts**       | Visualizations                                   |
+| Notifications    | **React Toastify** | Feedback and toasts                              |
 
-## Project Structure
+## Repository Layout (Empty Shell)
 
 ```
 frontend/
-├── app/
-│   ├── (auth)/                # Auth-related pages (login, register, reset password)
-│   ├── (dashboard)/           # User and admin dashboards
-│   ├── (tickets)/             # Ticket management pages
-│   ├── (wallet)/              # Wallet and transaction views
-│   ├── layout.tsx             # Global layout and header
-│   └── page.tsx               # Default landing page
-├── components/
-│   ├── ui/                    # HeroUI component wrappers
-│   ├── forms/                 # Custom reusable form components
-│   ├── dashboard/             # Widgets and charts
-│   └── shared/                # Common UI elements (Navbar, Footer, etc.)
-├── hooks/
-│   └── useAuth.ts             # Auth helper hook
-├── lib/
-│   ├── api.ts                 # Axios instance and interceptors
-│   ├── auth.ts                # JWT utilities
-│   └── config.ts              # Global constants
-├── public/                    # Static assets
-├── styles/                    # Global and Tailwind CSS
-├── types/                     # TypeScript interfaces
-└── package.json
+├── Dockerfile          # Placeholder command only
+├── package.json        # Placeholder dependency manifest
+└── (no Next.js app yet)
 ```
 
----
+Generate the Next.js project (`npx create-next-app`) before attempting to run the container.
 
-## Routing & Pages
+## Pages to Build
 
-Next.js **App Router** (`/app` directory) handles routing.  
-Each route corresponds to a logical module (e.g., `/wallet`, `/tickets`).  
-Dynamic routes (e.g., `/tickets/[id]`) display detailed ticket info.
+Once the app exists, map business domains to routes:
 
-| Route            | Description                                           |
-| ---------------- | ----------------------------------------------------- |
-| `/`              | Landing page with overview and login/register buttons |
-| `/auth/login`    | User authentication page                              |
-| `/auth/register` | Sign-up form (email/password)                         |
-| `/dashboard`     | Personalized user dashboard                           |
-| `/wallet`        | Wallet overview, transaction history, fund transfers  |
-| `/tickets`       | List and manage user’s asset lending requests         |
-| `/admin`         | Admin dashboard (for admins only)                     |
+| Route (planned)  | Goal (planned)                                  |
+| ---------------- | ----------------------------------------------- |
+| `/`              | Marketing/overview + entry point                |
+| `/auth/login`    | User authentication                             |
+| `/dashboard`     | Personalized metrics and shortcuts              |
+| `/wallet`        | Balance overview and transfer initiation        |
+| `/tickets`       | Loan request management                         |
+| `/admin`         | Administrative back office                      |
 
----
+## Development Checklist
 
-## API Integration
+1. Scaffold Next.js App Router project in `frontend/`.
+2. Add `.env` variables expected by the placeholders (e.g., `NEXT_PUBLIC_API_URL`).
+3. Re-enable `npm ci` and `npm run build` lines in [`frontend/Dockerfile`](../frontend/Dockerfile).
+4. Implement API client wrappers pointing to the Django Ninja endpoints.
+5. Build shared UI primitives and layout components.
+6. Swap the placeholder command for `npm run dev` (local) or `npm run start` (production) and validate with the Compose stack.
 
-All data is fetched from the **Django Ninja API** using the configured Axios client.
+## Testing Plan (Future)
 
-**Example API Client (`lib/api.ts`):**
+Testing and linting will come online after the app exists:
 
-```typescript
-import axios from "axios";
+- Component tests with Jest + React Testing Library.
+- E2E flows with Playwright pointed at the Compose stack.
+- ESLint/Prettier checks during CI.
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true,
-});
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      window.location.href = "/auth/login";
-    }
-    return Promise.reject(error);
-  }
-);
-
-export default api;
-```
-
-**Example Usage:**
-
-```typescript
-import api from "@/lib/api";
-
-export async function fetchTickets() {
-  const { data } = await api.get("/tickets/");
-  return data;
-}
-```
-
----
-
-## Authentication Flow
-
-1. User logs in via `/auth/login` → backend issues **JWT** in an HttpOnly cookie.
-2. Auth state is persisted client-side using a secure API call to `/users/me/`.
-3. Protected routes are wrapped in a **`RequireAuth`** higher-order component (HOC).
-4. Unauthorized users are redirected to `/auth/login` automatically.
-
----
-
-## State Management
-
-**Auth Context (Example):**
-
-```typescript
-import { createContext, useContext, useState } from "react";
-
-const AuthContext = createContext(null);
-
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  const login = async (email, password) => {
-    const { data } = await api.post("/auth/login/", { email, password });
-    setUser(data.user);
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, login }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => useContext(AuthContext);
-```
-
----
-
-## UI Design Guidelines
-
-- **Color Palette:** Neutral background, HeroUI primary theme, soft shadows, rounded corners.
-- **Typography:** Vazirmatn font for readability.
-- **Layout:** Responsive grid with sidebar navigation for dashboards.
-- **Accessibility & Dark Mode:** Handled by HeroUI.
-
----
-
-## Testing
-
-| Type              | Tool              | Description                      |
-| ----------------- | ----------------- | -------------------------------- |
-| Unit Tests        | Jest              | Component-level tests            |
-| Integration Tests | Playwright        | End-to-end testing of user flows |
-| Linting           | ESLint + Prettier | Code quality enforcement         |
-
-Run all tests:
-
-```bash
-npm run test
-```
-
----
-
-## Deployment
-
-Frontend is deployed via GHCR.
-
----
-
-## Performance Optimization
-
-- **Static Rendering (SSG)** for public pages.
-- **Incremental Static Regeneration (ISR)** for dashboards.
-- **Dynamic Imports** for heavy components.
-- **Image Optimization** via Next.js `<Image />`.
-- **Caching:** HTTP-level caching for API responses.
-
----
-
-## Future Enhancements
-
-- Offline support with Service Workers.
-- Progressive Web App (PWA) mode.
-- Advanced animations with Framer Motion.
-- Localization (i18n) for multi-language support.
-- Component theming using CSS variables.
+Keep referencing the [roadmap](./index.md#roadmap) so frontend milestones align with backend progress.
