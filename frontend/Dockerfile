@@ -13,7 +13,7 @@ COPY . ./
 
 EXPOSE 3000
 
-CMD ["bash", "-lc", "echo Frontend container placeholder; tail -f /dev/null"]
+CMD ["/bin/sh", "-c", "echo Frontend container placeholder; tail -f /dev/null"]
 # CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--port", "3000"]
 # Swap to production start command after implementing SSR build:
 # CMD ["npm", "run", "start"]

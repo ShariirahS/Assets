@@ -25,7 +25,7 @@ COPY . ./
 
 EXPOSE 8000
 
-CMD ["bash", "-lc", "echo Backend container placeholder; tail -f /dev/null"]
+CMD ["/bin/sh", "-c", "echo Backend container placeholder; tail -f /dev/null"]
 # CMD ["python manage.py runserver 0.0.0.0:8000"]
 # Replace the command above with gunicorn once the Django app is live:
 # CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
