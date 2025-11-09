@@ -71,6 +71,17 @@ docker compose up --build
 
 ---
 
+## ⚠️ Current Dev Caveats
+
+| Service | What you’ll see today | Workaround |
+|---------|-----------------------|------------|
+| Backend (Django) | `python manage.py runserver` is wired into Docker, but the project scaffold isn’t checked in yet, so the container exits with a missing `manage.py` error. | Keep the container stopped for now; once the Django app lands, restart with `docker compose up`. |
+| Frontend (Next.js) | `npm run dev` now invokes Next.js, but the `next` dependency isn’t installed until the real app ships. | Wait to run the command until the frontend package.json gains the proper dependencies. |
+
+> 💡 **WSL heads-up:** Docker Desktop still needs to stay running, and you’ll see the backend container crash fast for the reason above—that’s expected until the Django project is merged.
+
+---
+
 ## 🫶 License
 
 MIT License — free to use.

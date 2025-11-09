@@ -29,9 +29,8 @@ services:
       DATABASE_URL: ${DATABASE_URL}
     volumes:
       - ./backend:/app
-    command: |
-      bash -lc "echo 'Backend placeholder awaiting Django app'; tail -f /dev/null"
-      # python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+    command: >
+      bash -lc "python manage.py runserver 0.0.0.0:8000"
       # Once the Django project exists, replace with gunicorn:
       # gunicorn config.wsgi:application --bind 0.0.0.0:8000
     ports:
@@ -50,10 +49,8 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     volumes:
       - ./frontend:/app
-    command: |
-      bash -lc "echo 'Frontend placeholder awaiting Next.js app'; tail -f /dev/null"
-      # npm run dev -- --hostname 0.0.0.0 --port 3000
-      # Replace with `npm run start` after building the Next.js app.
+    command: >
+      bash -lc "npm run dev -- --hostname 0.0.0.0 --port 3000"
     ports:
       - "3000:3000"
     depends_on:
