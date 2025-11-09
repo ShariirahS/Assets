@@ -5,6 +5,7 @@ site_url: https://shari-ar.github.io/Assets/
 repo_url: https://github.com/shari-ar/Assets/
 nav:
   - "📘 Architecture": index.md
+  - "🚀 Roadmap": roadmap.md
   - "🧱 System Design Spec": system-design.md
   - "🧩 API Reference": api-reference.md
   - "🔐 Auth & Security": auth-security.md
