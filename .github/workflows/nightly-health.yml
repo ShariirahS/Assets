@@ -1,0 +1,53 @@
+name: Nightly Health
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+jobs:
+  db-backup:
+    name: Database backup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run backup script
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "Nightly backup placeholder"
+          # bash scripts/db_backup.sh
+
+  smoke-tests:
+    name: Smoke tests
+    runs-on: ubuntu-latest
+    needs: db-backup
+    steps:
+      - name: Hit backend health endpoint
+        run: |
+          echo "Backend smoke test placeholder"
+          # curl --fail https://staging.assets.app/healthz || exit 1
+          # Replace URL with deployed backend endpoint when available.
+      - name: Hit frontend status endpoint
+        run: |
+          echo "Frontend smoke test placeholder"
+          # curl --fail https://staging.assets.app/api/status || exit 1
+          # Replace URL with deployed frontend endpoint when available.
+
+  sentry-report:
+    name: Sentry digest
+    runs-on: ubuntu-latest
+    needs: smoke-tests
+    steps:
+      - name: Post summary to Slack
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          echo "Sentry digest placeholder"
+          # curl -X POST -H 'Content-type: application/json' --data "$(python scripts/sentry_digest.py)" "$SLACK_WEBHOOK"

@@ -1,0 +1,104 @@
+name: Release Build
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  deployments: write
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install backend deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          # pip install -r backend/requirements.txt
+      - name: Install frontend deps
+        run: |
+          # npm ci --prefix frontend
+          echo "Frontend dependencies placeholder"
+      - name: Run backend tests
+        run: |
+          echo "Backend tests placeholder"
+          # pytest --maxfail=1 --disable-warnings
+      - name: Run frontend tests
+        run: |
+          echo "Frontend tests placeholder"
+          # npm run test --prefix frontend
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: unit-test
+    outputs:
+      backend-tag: ${{ steps.meta.outputs.backend-tag }}
+      frontend-tag: ${{ steps.meta.outputs.frontend-tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Compute image tags
+        id: meta
+        run: |
+          echo "backend-tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "frontend-tag=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+      - name: Build and push images
+        env:
+          REPOSITORY: ${{ github.repository }}
+          BACKEND_TAG: ${{ steps.meta.outputs.backend-tag }}
+          FRONTEND_TAG: ${{ steps.meta.outputs.frontend-tag }}
+        run: |
+          repo_lc="${REPOSITORY,,}"
+          docker build -t "ghcr.io/${repo_lc}/backend:${BACKEND_TAG}" ./backend
+          docker build -t "ghcr.io/${repo_lc}/frontend:${FRONTEND_TAG}" ./frontend
+          # docker push "ghcr.io/${repo_lc}/backend:${BACKEND_TAG}"
+          # docker push "ghcr.io/${repo_lc}/frontend:${FRONTEND_TAG}"
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    environment:
+      name: staging
+      url: https://staging.assets.app
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "ssh deploy@staging 'docker compose pull && docker compose up -d'"
+          # ssh deploy@staging 'docker compose pull && docker compose up -d'
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment:
+      name: production
+      url: https://assets.app
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - name: Await approval
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          description: "Manual approval for production deploy"
+      - name: Deploy to production
+        run: |
+          echo "ssh deploy@production 'docker compose pull && docker compose up -d'"
+          # ssh deploy@production 'docker compose pull && docker compose up -d'

@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-assets}
+      POSTGRES_USER: ${POSTGRES_USER:-assets}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-assets}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - ./backend:/app
+    command: |
+      bash -lc "echo 'Backend placeholder awaiting Django app'; tail -f /dev/null"
+      # python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+      # Once the Django project exists, replace with gunicorn:
+      # gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    volumes:
+      - ./frontend:/app
+    command: |
+      bash -lc "echo 'Frontend placeholder awaiting Next.js app'; tail -f /dev/null"
+      # npm run dev -- --hostname 0.0.0.0 --port 3000
+      # Replace with `npm run start` after building the Next.js app.
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  proxy:
+    build:
+      context: ./deploy/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./deploy/nginx/conf.d:/etc/nginx/templates:ro
+    environment:
+      # Provide the upstream hosts when configuration templates are ready.
+      NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx/conf.d
+      # UPSTREAM_BACKEND: http://backend:8000
+      # UPSTREAM_FRONTEND: http://frontend:3000
+
+volumes:
+  postgres-data:

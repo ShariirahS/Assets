@@ -1,0 +1,3 @@
+compose_project: assets
+compose_file: /opt/assets/compose.yml
+backup_cron: "0 1 * * *"
