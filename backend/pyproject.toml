@@ -1,3 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "assets-backend"
+version = "0.1.0"
+description = "Django backend shell for the Assets platform"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "Django==5.0.6",
+    "django-ninja==1.1.0",
+    "dj-database-url==2.3.0",
+    "django-cors-headers==4.3.1",
+    "psycopg[binary]==3.1.19",
+]
+
 ## Project configuration for the dev container
 
 [tool.black]
@@ -21,7 +39,7 @@ extend-select = [
   "B",    # flake8-bugbear【159746283155068†L245-L246】
   "C4",   # flake8-comprehensions【159746283155068†L245-L246】
   "EM",   # flake8-errmsg【159746283155068†L245-L246】
-  "EXE",  # flake8-executable【159746283155068†L245-L246】
+  "EXE",  # flake8-executable【159746283155068†L245-L255】
   "FURB", # refurb【159746283155068†L245-L255】
   "G",    # flake8-logging-format【159746283155068†L245-L255】
   "I",    # isort【159746283155068†L252-L253】

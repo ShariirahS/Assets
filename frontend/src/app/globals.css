@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 246 32% 8%;
+  --foreground: 0 0% 100%;
+}
+
+body {
+  @apply bg-background text-foreground;
+}
+
+main {
+  @apply py-10;
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur;
+  }
+}
