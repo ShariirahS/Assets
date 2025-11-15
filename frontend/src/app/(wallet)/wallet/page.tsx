@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import {
+  Card,
+  CardBody,
+  CardHeader,
   Progress,
   Spinner,
   Table,
@@ -53,142 +56,93 @@ export default function WalletPage() {
 
   return (
     <AuthGate>
-      <div className="flex flex-col gap-12">
-        {isLoading ? (
-          <div className="flex h-[360px] items-center justify-center rounded-hero border border-border/40 bg-surface/70 shadow-soft">
-            <Spinner color="primary" label="Balancing ledgers..." labelColor="foreground" />
-          </div>
-        ) : error || !data ? (
-          <div className="rounded-[2rem] border border-dangerAccent/40 bg-dangerAccent/10 p-8 text-center shadow-soft">
-            <p className="text-sm font-medium text-dangerAccent">{error ?? "Wallet information unavailable"}</p>
-          </div>
-        ) : (
-          <>
-            <section className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
-              <div className="relative overflow-hidden rounded-[2.25rem] border border-accent/30 bg-surface shadow-hero">
-                <div className="absolute inset-0 layer-gradient opacity-95" />
-                <div className="relative flex h-full flex-col gap-6 px-8 py-10 text-white">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">Wallet reserve</p>
-                    <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-                      {formatCurrency(data.wallet.balance, data.wallet.currency)}
-                    </h1>
-                    <p className="mt-3 text-sm text-white/75">Status · {data.wallet.status.toUpperCase()}</p>
-                  </div>
-                  <div className="rounded-[1.5rem] border border-white/20 bg-white/10 p-6 backdrop-blur">
-                    <p className="text-xs font-semibold uppercase tracking-[0.32em] text-white/60">Settlement buffer</p>
-                    <div className="mt-4 flex items-center gap-4">
-                      <Progress
-                        aria-label="Settlement buffer"
-                        value={data.wallet.settlementBuffer}
-                        classNames={{
-                          base: "flex-1",
-                          indicator: "bg-white",
-                          track: "bg-white/20",
-                        }}
-                      />
-                      <span className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold">
-                        {data.wallet.settlementBuffer}%
-                      </span>
-                    </div>
-                    <p className="mt-3 text-xs text-white/70">Verified inflows secured across counterparties.</p>
-                  </div>
-                  <div className="rounded-[1.5rem] border border-white/15 bg-white/10 p-6 backdrop-blur">
-                    <p className="text-xs font-semibold uppercase tracking-[0.32em] text-white/60">Next payouts</p>
-                    <p className="mt-4 text-2xl font-semibold tracking-tight">
-                      {formatCurrency(data.wallet.upcomingPayouts, data.wallet.currency)}
-                    </p>
-                    <p className="mt-2 text-xs text-white/70">
-                      Latest activity {data.transactions[0] ? formatRelativeTime(data.transactions[0].createdAt) : "pending"}
-                    </p>
-                  </div>
-                </div>
-                <div className="pointer-events-none absolute -right-20 top-20 h-60 w-60 rounded-full bg-white/25 blur-[140px]" />
+      <div className="flex flex-col gap-8">
+        <Card>
+          <CardHeader>
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground">Wallet overview</h1>
+              <p className="text-small text-default-500">Monitor available balances, ledger health, and last activity.</p>
+            </div>
+          </CardHeader>
+          <CardBody className="grid gap-6 md:grid-cols-3">
+            {isLoading ? (
+              <div className="col-span-3 flex h-40 items-center justify-center">
+                <Spinner color="primary" label="Loading wallet..." labelColor="foreground" />
               </div>
-              <div className="layer-card flex flex-col gap-6 p-8">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-muted">Ledger posture</p>
-                  <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">Operational vitals</h2>
-                </div>
-                <div className="grid gap-4">
-                  <div className="rounded-[1.5rem] border border-border/40 bg-surfaceMuted/70 p-5 shadow-soft">
-                    <p className="text-xs uppercase tracking-[0.32em] text-muted">Clearing focus</p>
-                    <p className="mt-3 text-sm text-foreground">
-                      Automated sweeps watch {data.transactions.length.toString()} transactions right now.
-                    </p>
-                  </div>
-                  <div className="rounded-[1.5rem] border border-border/40 bg-surfaceMuted/70 p-5 shadow-soft">
-                    <p className="text-xs uppercase tracking-[0.32em] text-muted">Compliance sync</p>
-                    <p className="mt-3 text-sm text-foreground">
-                      Every payout is mirrored with ledger-grade audit trails in under five minutes.
-                    </p>
-                  </div>
-                </div>
+            ) : error || !data ? (
+              <div className="col-span-3 rounded-xl border border-danger-500/50 bg-danger-500/10 p-6 text-center">
+                <p className="text-sm text-danger-500">{error ?? "Wallet information unavailable"}</p>
               </div>
-            </section>
-            <section className="layer-card overflow-hidden">
-              <div className="flex items-center justify-between border-b border-border/30 px-8 py-6">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-muted">Recent transactions</p>
-                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">Wallet movements</h2>
+            ) : (
+              <>
+                <div className="rounded-xl border border-default-200/40 p-4">
+                  <p className="text-sm text-default-500">Available balance</p>
+                  <p className="text-3xl font-semibold text-foreground">
+                    {formatCurrency(data.wallet.balance, data.wallet.currency)}
+                  </p>
+                  <p className="text-tiny text-default-500">Status: {data.wallet.status}</p>
                 </div>
-                <span className="hidden rounded-full bg-accent/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-accent md:block">
-                  {data.transactions.length} entries
-                </span>
+                <div className="rounded-xl border border-default-200/40 p-4">
+                  <p className="text-sm text-default-500">Settlement buffer</p>
+                  <Progress
+                    aria-label="Settlement buffer"
+                    value={data.wallet.settlementBuffer}
+                    color={data.wallet.settlementBuffer > 50 ? "success" : "warning"}
+                    className="mt-3"
+                  />
+                  <p className="mt-2 text-xs text-default-500">{data.wallet.settlementBuffer}% verified inflows</p>
+                </div>
+                <div className="rounded-xl border border-default-200/40 p-4">
+                  <p className="text-sm text-default-500">Upcoming payouts</p>
+                  <p className="text-3xl font-semibold text-foreground">
+                    {formatCurrency(data.wallet.upcomingPayouts, data.wallet.currency)}
+                  </p>
+                </div>
+              </>
+            )}
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
+            <h2 className="text-lg font-semibold text-foreground">Recent transactions</h2>
+          </CardHeader>
+          <CardBody>
+            {isLoading ? (
+              <div className="flex h-40 items-center justify-center">
+                <Spinner color="primary" label="Loading transactions..." labelColor="foreground" />
               </div>
-              <div className="px-2 pb-6 pt-4">
-                {data.transactions.length === 0 ? (
-                  <p className="px-6 py-4 text-sm text-muted">No transactions recorded yet.</p>
-                ) : (
-                  <Table
-                    removeWrapper
-                    aria-label="Recent wallet transactions"
-                    classNames={{
-                      base: "rounded-[1.75rem]", // not used? but we can keep
-                      table: "min-w-full", 
-                      thead: "[&_th]:bg-transparent", 
-                      th: "border-b border-border/30 px-6 py-4 text-left text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-muted",
-                      td: "px-6 py-5 text-sm text-foreground",
-                      tr: "border-b border-border/20 last:border-none transition-colors hover:bg-surfaceMuted/60",
-                      wrapper: "", 
-                    }}
-                  >
-                    <TableHeader>
-                      <TableColumn>Reference</TableColumn>
-                      <TableColumn>Ticket</TableColumn>
-                      <TableColumn>Type</TableColumn>
-                      <TableColumn>Amount</TableColumn>
-                      <TableColumn>Status</TableColumn>
-                      <TableColumn>Created</TableColumn>
-                    </TableHeader>
-                    <TableBody emptyContent={""}>
-                      {data.transactions.map((transaction) => (
-                        <TableRow key={transaction.id}>
-                          <TableCell className="font-semibold text-foreground">{transaction.reference}</TableCell>
-                          <TableCell className="text-muted">{transaction.ticketAsset}</TableCell>
-                          <TableCell className="uppercase tracking-[0.28em] text-xs text-muted">
-                            {transaction.type}
-                          </TableCell>
-                          <TableCell className="font-semibold text-foreground">
-                            {formatCurrency(transaction.amount, data.wallet.currency)}
-                          </TableCell>
-                          <TableCell>
-                            <span className="rounded-full bg-accent/15 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-accent">
-                              {transaction.statusLabel}
-                            </span>
-                          </TableCell>
-                          <TableCell className="text-xs uppercase tracking-[0.28em] text-muted">
-                            {formatRelativeTime(transaction.createdAt)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </div>
-            </section>
-          </>
-        )}
+            ) : error || !data ? (
+              <p className="text-sm text-default-500">{error ?? "Transactions unavailable."}</p>
+            ) : data.transactions.length === 0 ? (
+              <p className="text-sm text-default-500">No transactions recorded yet.</p>
+            ) : (
+              <Table removeWrapper aria-label="Recent wallet transactions">
+                <TableHeader>
+                  <TableColumn>Reference</TableColumn>
+                  <TableColumn>Ticket</TableColumn>
+                  <TableColumn>Type</TableColumn>
+                  <TableColumn>Amount</TableColumn>
+                  <TableColumn>Status</TableColumn>
+                  <TableColumn>Created</TableColumn>
+                </TableHeader>
+                <TableBody>
+                  {data.transactions.map((transaction) => (
+                    <TableRow key={transaction.id}>
+                      <TableCell>{transaction.reference}</TableCell>
+                      <TableCell>{transaction.ticketAsset}</TableCell>
+                      <TableCell>{transaction.type}</TableCell>
+                      <TableCell>
+                        {formatCurrency(transaction.amount, data.wallet.currency)}
+                      </TableCell>
+                      <TableCell>{transaction.statusLabel}</TableCell>
+                      <TableCell>{formatRelativeTime(transaction.createdAt)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardBody>
+        </Card>
       </div>
     </AuthGate>
   );
