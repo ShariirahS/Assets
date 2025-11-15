@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AuthForm } from "@/components/forms/AuthForm";
 import { register as registerUser } from "@/lib/auth";
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
 type RegisterFormValues = {

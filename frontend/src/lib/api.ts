@@ -1,7 +1,6 @@
 import axios from "axios";
 
 declare module "axios" {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface InternalAxiosRequestConfig {
     _retry?: boolean;
   }

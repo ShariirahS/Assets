@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { AuthGate } from "@/components/auth/AuthGate";
 
 const auditLog = [
