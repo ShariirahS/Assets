@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/shared/Providers";
 import { AppNavbar } from "@/components/shared/AppNavbar";
 import { AppFooter } from "@/components/shared/AppFooter";
-
-const sans = Inter({ subsets: ["latin"], variable: "--font-geist-sans" });
-const mono = Roboto_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
   title: "Assets Platform",
@@ -20,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sans.variable} ${mono.variable} bg-background antialiased`}>
+      <body className="bg-background font-sans antialiased">
         <Providers>
           <div className="flex min-h-screen flex-col">
             <AppNavbar />
