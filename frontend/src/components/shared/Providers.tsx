@@ -1,6 +1,6 @@
 "use client";
 
-import { HeroUIProvider } from "@heroui/react";
+import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { ReactNode, useEffect, useRef } from "react";
 import { ToastContainer } from "react-toastify";
@@ -43,10 +43,10 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <NextThemesProvider attribute="class" defaultTheme="light" enableSystem>
-      <HeroUIProvider>
+      <NextUIProvider>
         {children}
         <ThemedToastContainer />
-      </HeroUIProvider>
+      </NextUIProvider>
     </NextThemesProvider>
   );
 }

@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  Avatar,
-  Button,
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-} from "@heroui/react";
+  Link,
+  Button,
+  Avatar,
+} from "@nextui-org/react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
@@ -51,27 +51,24 @@ export function AppNavbar() {
 
   return (
     <Navbar
-      maxWidth="lg"
-      position="static"
-      className="mt-6 rounded-[2.25rem] border border-border/40 bg-surface/70 px-4 py-4 shadow-soft backdrop-blur-2xl"
+      maxWidth="xl"
+      position="sticky"
+      className="mt-6 rounded-full border border-border/40 bg-surface/70 px-4 py-3 shadow-soft backdrop-blur-2xl"
     >
-      <NavbarBrand className="items-center gap-3 text-large text-foreground">
-        <span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accentStrong text-lg font-bold text-white shadow-hero">
-          ✦
+      <NavbarBrand className="items-center gap-2 font-semibold text-large text-foreground">
+        <span className="flex size-10 items-center justify-center rounded-2xl bg-accent/20 text-accent shadow-soft">
+          ◈
         </span>
-        <div className="flex flex-col">
-          <Link
-            as={NextLink}
-            href="/"
-            color="foreground"
-            className="text-lg font-semibold tracking-tight"
-          >
-            {APP_NAME}
-          </Link>
-          <span className="text-[0.65rem] uppercase tracking-[0.4em] text-muted">care mission control</span>
-        </div>
+        <Link
+          as={NextLink}
+          href="/"
+          color="foreground"
+          className="bg-gradient-to-r from-accent via-accentStrong to-[#8F7BFF] bg-clip-text text-transparent"
+        >
+          {APP_NAME}
+        </Link>
       </NavbarBrand>
-      <NavbarContent className="hidden gap-2 md:flex" justify="center">
+      <NavbarContent className="hidden gap-3 sm:flex" justify="center">
         {links.map((item) => {
           const isActive = pathname.startsWith(item.href);
           return (
@@ -79,10 +76,10 @@ export function AppNavbar() {
               <Link
                 as={NextLink}
                 href={item.href}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 ${
                   isActive
-                    ? "bg-gradient-to-r from-accent to-accentStrong text-white shadow-soft"
-                    : "text-muted hover:bg-surfaceMuted/80 hover:text-foreground"
+                    ? "bg-accent/20 text-accent shadow-soft"
+                    : "text-muted hover:bg-surfaceMuted/70 hover:text-foreground"
                 }`}
               >
                 {item.label}
@@ -97,10 +94,10 @@ export function AppNavbar() {
         </NavbarItem>
         {user ? (
           <>
-            <NavbarItem className="hidden items-center gap-3 xl:flex">
-              <div className="flex flex-col text-right">
+            <NavbarItem className="hidden items-center gap-3 lg:flex">
+              <div className="hidden flex-col text-right lg:flex">
                 <span className="text-sm font-semibold text-foreground">{user.fullName || user.email}</span>
-                <span className="text-[0.6rem] uppercase tracking-[0.4em] text-muted">{roleLabel}</span>
+                <span className="text-[0.65rem] uppercase tracking-[0.32em] text-muted">{roleLabel}</span>
               </div>
               <Avatar
                 className="size-11 border border-accent/30 bg-accent/15 text-accent shadow-soft"
@@ -112,7 +109,7 @@ export function AppNavbar() {
               <Button
                 size="sm"
                 radius="full"
-                className="bg-gradient-to-r from-accent to-accentStrong px-5 font-semibold text-white shadow-hero"
+                className="bg-gradient-to-r from-accent via-accentStrong to-[#8F7BFF] text-white shadow-hero"
                 onPress={async () => {
                   try {
                     await logout();
@@ -133,7 +130,7 @@ export function AppNavbar() {
               href="/auth/login"
               size="sm"
               radius="full"
-              className="bg-gradient-to-r from-accent to-accentStrong px-5 font-semibold text-white shadow-hero"
+              className="bg-gradient-to-r from-accent via-accentStrong to-[#8F7BFF] text-white shadow-hero"
             >
               Sign in
             </Button>
