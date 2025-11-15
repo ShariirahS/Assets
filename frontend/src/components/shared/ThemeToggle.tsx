@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button } from "@nextui-org/react";
 import { useTheme } from "next-themes";
-import { type SVGProps } from "react";
+import { useEffect, useState, type SVGProps } from "react";
 
 function SunIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -41,7 +41,13 @@ function MoonIcon(props: SVGProps<SVGSVGElement>) {
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
-  if (!resolvedTheme) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
     return null;
   }
 
@@ -49,17 +55,17 @@ export function ThemeToggle() {
 
   return (
     <Button
-      radius="full"
       size="sm"
+      radius="full"
       variant="light"
       onPress={() => setTheme(isDark ? "light" : "dark")}
-      className="group flex items-center gap-2 bg-surfaceContrast/60 px-3 py-2 text-foreground shadow-soft backdrop-blur-md transition-all duration-300 ease-soft-bounce hover:-translate-y-0.5 hover:bg-surfaceContrast/80"
+      className="group flex items-center gap-2 bg-surfaceContrast/60 px-3 py-2 text-foreground shadow-soft backdrop-blur-lg transition-all duration-300 ease-soft-bounce hover:scale-105 hover:bg-surfaceContrast/80"
     >
-      <span className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accentStrong text-white shadow-soft">
+      <span className="flex size-8 items-center justify-center rounded-full bg-accent/15 text-accent">
         {isDark ? <MoonIcon className="size-4" /> : <SunIcon className="size-4" />}
       </span>
-      <span className="text-xs font-semibold uppercase tracking-[0.28em] text-muted">
-        {isDark ? "Night" : "Day"}
+      <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted">
+        {isDark ? "Dark" : "Light"}
       </span>
     </Button>
   );

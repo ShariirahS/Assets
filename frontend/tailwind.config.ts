@@ -40,9 +40,19 @@ const config = {
       transitionTimingFunction: {
         'soft-bounce': 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
+      boxShadow: {
+        floating: "0px 28px 65px -40px rgba(9, 23, 42, 0.55)",
+        soft: "0px 24px 45px -38px rgba(15, 23, 42, 0.45)",
+        hero: "0px 35px 85px -50px rgba(8, 14, 40, 0.75)",
+      },
+      borderRadius: {
+        hero: "2.5rem",
+      },
+      transitionTimingFunction: {
+        'soft-bounce': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
     },
   },
-  plugins: [heroui() as never],
-} satisfies Config;
-
+  plugins: [heroui()],
+};
 export default config;
