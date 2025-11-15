@@ -29,6 +29,8 @@ const STATUS_COLORS: Partial<Record<TicketItem["status"], ChipProps["color"]>> =
   cancelled: "danger",
 };
 
+const PRIORITY_STATUSES = new Set<TicketItem["status"]>(["pending", "accepted", "active"]);
+
 export default function TicketsPage() {
   const [tickets, setTickets] = useState<TicketItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -1,7 +1,17 @@
 "use client";
 
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useTheme } from "next-themes";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  type TooltipProps,
+} from "recharts";
 
 import type { PerformancePoint } from "@/types";
 
@@ -11,11 +21,16 @@ interface PerformanceChartProps {
 
 export function PerformanceChart({ data }: PerformanceChartProps) {
   return (
-    <Card>
+    <Card className="layer-card overflow-hidden">
       <CardHeader className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-foreground">Weekly Performance</h2>
-          <p className="text-small text-default-500">Ticket approvals and wallet inflows</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-muted">Weekly pulse</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
+            Performance trajectory
+          </h2>
+        </div>
+        <div className="hidden rounded-2xl border border-accent/30 bg-accent/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.3em] text-accent md:block">
+          {isDark ? "night shift" : "day shift"}
         </div>
       </CardHeader>
       <CardBody className="h-64">

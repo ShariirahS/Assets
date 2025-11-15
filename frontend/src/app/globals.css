@@ -3,20 +3,71 @@
 @tailwind utilities;
 
 :root {
-  --background: 246 32% 8%;
-  --foreground: 0 0% 100%;
+  color-scheme: light;
+  --background: 205 75% 96%;
+  --foreground: 224 33% 16%;
+  --surface: 0 0% 100%;
+  --surface-muted: 202 74% 94%;
+  --surface-contrast: 201 64% 88%;
+  --border: 206 41% 84%;
+  --muted: 215 18% 38%;
+  --accent: 192 94% 43%;
+  --accent-strong: 226 83% 58%;
+  --accent-soft: 189 87% 88%;
+  --success: 152 70% 38%;
+  --danger: 351 83% 55%;
+  --warning: 35 92% 55%;
+  --background-gradient:
+    radial-gradient(circle at 15% 20%, hsl(192 92% 92%) 0%, transparent 55%),
+    radial-gradient(circle at 85% 15%, hsl(228 89% 92%) 0%, transparent 45%),
+    linear-gradient(150deg, hsl(206 80% 97%) 0%, hsl(210 60% 99%) 100%);
+}
+
+.dark {
+  color-scheme: dark;
+  --background: 227 58% 6%;
+  --foreground: 209 54% 95%;
+  --surface: 225 52% 12%;
+  --surface-muted: 226 55% 16%;
+  --surface-contrast: 226 56% 21%;
+  --border: 225 38% 30%;
+  --muted: 217 16% 74%;
+  --accent: 194 95% 62%;
+  --accent-strong: 239 74% 68%;
+  --accent-soft: 198 94% 24%;
+  --success: 149 63% 52%;
+  --danger: 356 76% 63%;
+  --warning: 38 95% 58%;
+  --background-gradient:
+    radial-gradient(circle at 10% 10%, hsl(211 84% 18% / 0.9) 0%, transparent 60%),
+    radial-gradient(circle at 90% 20%, hsl(266 83% 22% / 0.75) 0%, transparent 55%),
+    linear-gradient(155deg, hsl(224 65% 8%) 0%, hsl(226 62% 12%) 100%);
 }
 
 body {
-  @apply bg-background text-foreground;
+  @apply min-h-screen overflow-x-hidden bg-background text-foreground antialiased;
+  background-image: var(--background-gradient);
+  background-attachment: fixed;
 }
 
 main {
-  @apply py-10;
+  @apply py-14;
 }
 
 @layer utilities {
-  .glass-panel {
-    @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur;
+  .layer-card {
+    @apply rounded-[1.75rem] border border-border/40 bg-surface shadow-floating;
+  }
+
+  .layer-muted {
+    @apply rounded-3xl border border-border/30 bg-surface-muted shadow-soft;
+  }
+
+  .layer-gradient {
+    background: linear-gradient(130deg, hsl(var(--accent) / 0.92) 0%, hsl(var(--accent-strong) / 0.9) 48%, hsl(268 94% 74% / 0.9) 100%);
+  }
+
+  .text-muted {
+    color: hsl(var(--muted));
   }
 }

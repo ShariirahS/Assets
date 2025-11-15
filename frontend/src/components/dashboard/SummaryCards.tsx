@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { formatCurrency } from "@/lib/format";
+import type { DashboardMetric } from "@/types";
 
 import { formatCurrency } from "@/lib/format";
 import type { DashboardMetric } from "@/types";
