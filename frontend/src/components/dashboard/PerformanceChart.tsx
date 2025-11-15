@@ -3,15 +3,13 @@
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-const chartData = [
-  { name: "Mon", value: 1200 },
-  { name: "Tue", value: 980 },
-  { name: "Wed", value: 1430 },
-  { name: "Thu", value: 1120 },
-  { name: "Fri", value: 1680 },
-];
+import type { PerformancePoint } from "@/types";
 
-export function PerformanceChart() {
+interface PerformanceChartProps {
+  data: PerformancePoint[];
+}
+
+export function PerformanceChart({ data }: PerformanceChartProps) {
   return (
     <Card>
       <CardHeader className="flex items-center justify-between">
@@ -21,16 +19,22 @@ export function PerformanceChart() {
         </div>
       </CardHeader>
       <CardBody className="h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData}>
-            <XAxis dataKey="name" stroke="#888" fontSize={12} />
-            <YAxis stroke="#888" fontSize={12} />
-            <Tooltip
-              contentStyle={{ background: "#0f172a", borderRadius: 12, color: "#fff" }}
-            />
-            <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={3} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
+        {data.length === 0 ? (
+          <div className="flex h-full items-center justify-center text-sm text-default-500">
+            No verified payments this week.
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data.map((point) => ({ name: point.label, value: point.value }))}>
+              <XAxis dataKey="name" stroke="#888" fontSize={12} />
+              <YAxis stroke="#888" fontSize={12} />
+              <Tooltip
+                contentStyle={{ background: "#0f172a", borderRadius: 12, color: "#fff" }}
+              />
+              <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={3} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </CardBody>
     </Card>
   );
