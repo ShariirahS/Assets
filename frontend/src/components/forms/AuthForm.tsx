@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import { useForm, type Path } from "react-hook-form";
-import { Input, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import { Input, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { AppButton } from "@/components/ui/AppButton";
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
