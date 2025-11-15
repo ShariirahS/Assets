@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Card, CardBody, Chip } from "@nextui-org/react";
+import { Card, CardBody, Chip } from "@heroui/react";
 
 import { AppButton } from "@/components/ui/AppButton";
 import { useBackendHealth } from "@/hooks/useBackendHealth";

@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@heroui/react";
 
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import type { AuthUser } from "@/types/auth";
